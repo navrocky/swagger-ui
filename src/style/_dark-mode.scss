@@ -185,6 +185,42 @@ html.dark-mode {
       border-color: $error-30;
     }
 
+    // ------ SIDEBAR ------
+
+    &.swagger-ui--with-sidebar .sidebar-toggle {
+      color: $neutral-20;
+      background: $neutral-80;
+    }
+
+    &.swagger-ui--with-sidebar .sidebar {
+      color: $neutral-20;
+      background: $neutral-95;
+      border-right-color: $neutral-80;
+
+      .sidebar__path {
+        color: $neutral-20;
+      }
+
+      .sidebar__drawer-header {
+        border-bottom-color: $neutral-80;
+      }
+
+      .sidebar__group[data-group="schemas"] {
+        border-top-color: $neutral-80;
+      }
+
+      .sidebar__group-title:hover,
+      .sidebar__operation:hover,
+      .sidebar__drawer-close:hover {
+        background: rgba($neutral-10, 0.06);
+      }
+
+      .sidebar__group-title.is-active,
+      .sidebar__operation.is-active {
+        background: rgba($link, 0.2);
+      }
+    }
+
     // ------ TOPBAR ------
 
     .topbar {

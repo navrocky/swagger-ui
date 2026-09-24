@@ -21,6 +21,7 @@ const defaultOptions = Object.freeze({
   displayOperationId: false,
   displayRequestDuration: false,
   deepLinking: false,
+  sidebar: false,
   tryItOutEnabled: false,
   requestInterceptor: (request) => {
     request.curlOptions = []

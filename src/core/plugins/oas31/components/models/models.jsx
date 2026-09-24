@@ -50,6 +50,8 @@ const Models = ({
   })
 
   const isVirtualized = schemaEntries.length >= VIRTUALIZE_MODELS_THRESHOLD
+  const pendingVirtualizedSchemaScroll =
+    layoutSelectors.getScrollToVirtualizedSchema?.()
 
   /**
    * Effects.
@@ -65,6 +67,35 @@ const Models = ({
       specActions.requestResolvedSubtree(SCHEMAS_PATH)
     }
   }, [isOpen, defaultModelsExpandDepth])
+
+  useEffect(() => {
+    if (!pendingVirtualizedSchemaScroll || !isVirtualized) return
+
+    const idx = schemaEntries.findIndex(
+      ([schemaName]) => schemaName === pendingVirtualizedSchemaScroll
+    )
+
+    if (idx !== -1) {
+      if (document.querySelector(".operations-virtual")) {
+        // scroll instantly to avoid recomputing virtualized operations
+        parentRef.current?.scrollIntoView({
+          behavior: "instant",
+          block: "start",
+        })
+      } else {
+        layoutActions.scrollToElement(parentRef.current)
+      }
+      virtualizer.scrollToIndex(idx, { align: "start" })
+    }
+
+    layoutActions.clearScrollToVirtualizedSchema()
+  }, [
+    pendingVirtualizedSchemaScroll,
+    schemaEntries,
+    virtualizer,
+    isVirtualized,
+    layoutActions,
+  ])
 
   /**
    * Event handlers.
@@ -176,10 +207,13 @@ Models.propTypes = {
   }).isRequired,
   layoutSelectors: PropTypes.shape({
     isShown: PropTypes.func.isRequired,
+    getScrollToVirtualizedSchema: PropTypes.func,
   }).isRequired,
   layoutActions: PropTypes.shape({
     show: PropTypes.func.isRequired,
     readyToScroll: PropTypes.func.isRequired,
+    scrollToElement: PropTypes.func,
+    clearScrollToVirtualizedSchema: PropTypes.func,
   }).isRequired,
   fn: PropTypes.shape({
     jsonSchema202012: PropTypes.func.shape({

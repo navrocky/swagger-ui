@@ -196,7 +196,7 @@ const Operations = ({
     }
 
     if (idx !== -1) {
-      virtualizer.scrollToIndex(idx, { align: "start" })
+      virtualizer.scrollToIndex(idx, { align: "start", behavior: "smooth" })
     }
 
     layoutActions.clearScrollToVirtualizedOperation()

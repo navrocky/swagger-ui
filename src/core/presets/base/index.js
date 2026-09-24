@@ -23,6 +23,7 @@ import DownloadUrlPlugin from "core/plugins/download-url"
 import SyntaxHighlightingPlugin from "core/plugins/syntax-highlighting"
 import VersionsPlugin from "core/plugins/versions"
 import SafeRenderPlugin from "core/plugins/safe-render"
+import SidebarPlugin from "core/plugins/sidebar"
 // ad-hoc plugins
 import CoreComponentsPlugin from "core/presets/base/plugins/core-components"
 import FormComponentsPlugin from "core/presets/base/plugins/form-components"
@@ -46,6 +47,7 @@ const BasePreset = () => [
   AuthPlugin,
   DownloadUrlPlugin,
   DeepLinkingPlugin,
+  SidebarPlugin,
   FilterPlugin,
   OnCompletePlugin,
   RequestSnippetsPlugin,
