@@ -31,6 +31,10 @@ const standardVariables = {
     type: "string",
     name: "layout"
   },
+  COLLAPSE_RESPONSES: {
+    type: "boolean",
+    name: "collapseResponses"
+  },
   DEEP_LINKING: {
     type: "boolean",
     name: "deepLinking"

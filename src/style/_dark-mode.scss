@@ -569,6 +569,19 @@ html.dark-mode {
         }
       }
 
+      .responses-toggle {
+        color: $neutral-20;
+      }
+
+      .responses-codes .response-code {
+        color: $neutral-20;
+        border-color: $neutral-60;
+
+        &.response_current {
+          border-color: $success-30;
+        }
+      }
+
       .response-control-media-type--accept-controller {
         select.content-type {
           border-color: $success-30;

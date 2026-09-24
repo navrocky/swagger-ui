@@ -594,6 +594,48 @@
   }
 }
 
+.responses-toggle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0;
+
+  font: inherit;
+  color: inherit;
+  text-align: left;
+
+  cursor: pointer;
+
+  background: none;
+  border: none;
+
+  svg {
+    flex-shrink: 0;
+  }
+}
+
+.responses-codes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+
+  .response-code {
+    padding: 1px 6px;
+
+    font-size: 12px;
+    font-weight: normal;
+
+    border: 1px solid rgba($black, 0.2);
+    border-radius: 3px;
+
+    @include type.text_code();
+
+    &.response_current {
+      border-color: $color-post;
+    }
+  }
+}
+
 .responses-inner {
   padding: 20px;
 
