@@ -18,6 +18,10 @@ import undefinedStringTypeCaster from "./type-casters/undefined-string"
 import defaultOptions from "../defaults"
 
 const mappings = {
+  alwaysShowExecute: {
+    typeCaster: booleanTypeCaster,
+    defaultValue: defaultOptions.alwaysShowExecute,
+  },
   components: { typeCaster: objectTypeCaster },
   configs: { typeCaster: objectTypeCaster },
   configUrl: { typeCaster: nullableStringTypeCaster },

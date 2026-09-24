@@ -203,6 +203,7 @@ export default class Parameters extends Component {
               isOAS3={specSelectors.isOAS3()}
               hasUserEditedBody={oas3Selectors.hasUserEditedBody(...pathMethod)}
               enabled={tryItOutEnabled}
+              alwaysEnabled={!!getConfigs().alwaysShowExecute}
               onCancelClick={this.props.onCancelClick}
               onTryoutClick={onTryoutClick}
               onResetClick={this.onResetClickWrapper}/>

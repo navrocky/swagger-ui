@@ -55,7 +55,7 @@ export default class OperationContainer extends PureComponent {
 
   mapStateToProps(nextState, props) {
     const { op, layoutSelectors, getConfigs } = props
-    const { docExpansion, deepLinking, displayOperationId, displayRequestDuration, supportedSubmitMethods, tryItOutEnabled: configTryItOutEnabled } = getConfigs()
+    const { docExpansion, deepLinking, displayOperationId, displayRequestDuration, supportedSubmitMethods, tryItOutEnabled: configTryItOutEnabled, alwaysShowExecute } = getConfigs()
     const showSummary = layoutSelectors.showSummary()
     const operationId = op.getIn(["operation", "__originalOperationId"]) || op.getIn(["operation", "operationId"]) || opId(op.get("operation"), props.path, props.method) || op.get("id")
     const isShownKey = ["operations", props.tag, operationId]
@@ -73,7 +73,7 @@ export default class OperationContainer extends PureComponent {
       security,
       isAuthorized: props.authSelectors.isAuthorized(security),
       isShown: layoutSelectors.isShown(isShownKey, docExpansion === "full" ),
-      tryItOutEnabled: layoutSelectors.isShown([...isShownKey, "try-it-out"], configTryItOutEnabled),
+      tryItOutEnabled: alwaysShowExecute || layoutSelectors.isShown([...isShownKey, "try-it-out"], configTryItOutEnabled),
       jumpToKey: `paths.${props.path}.${props.method}`,
       response: props.specSelectors.responseFor(props.path, props.method),
       request: props.specSelectors.requestFor(props.path, props.method)

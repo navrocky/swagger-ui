@@ -236,6 +236,17 @@ Parameter name | Docker variable | Description
         </td>
     </tr>
     <tr>
+        <td>
+            <a name="user-content-alwaysshowexecute"></a><code>alwaysShowExecute</code>
+        </td>
+        <td><code>ALWAYS_SHOW_EXECUTE</code></td>
+        <td><code>Boolean=false</code>. If set to <code>true</code>, operations
+            are always in "Try it out" mode: the parameters are editable and the
+            "Execute" button is always shown, while the "Try it out" and
+            "Cancel" buttons are hidden.
+        </td>
+    </tr>
+    <tr>
         <td><a name="user-content-requestsnippetsenabled"></a><code>requestSnippetsEnabled</code>
         </td>
         <td><em>Unavailable</em></td>

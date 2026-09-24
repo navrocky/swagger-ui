@@ -31,6 +31,10 @@ const standardVariables = {
     type: "string",
     name: "layout"
   },
+  ALWAYS_SHOW_EXECUTE: {
+    type: "boolean",
+    name: "alwaysShowExecute"
+  },
   DEEP_LINKING: {
     type: "boolean",
     name: "deepLinking"
