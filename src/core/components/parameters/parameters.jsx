@@ -64,6 +64,52 @@ export default class Parameters extends Component {
     const { layoutActions, pathMethod } = this.props
     layoutActions.show([...pathMethod, "callbacks-tab"], tab === "callbacks")
   }
+
+  onParametersTabClick = () => this.toggleTab("parameters")
+
+  onCallbacksTabClick = () => this.toggleTab("callbacks")
+
+  onResetClickWrapper = () => this.props.onResetClick(this.props.pathMethod)
+
+  onRequestContentTypeChange = (value) => {
+    this.onChangeMediaType({ value, pathMethod: this.props.pathMethod })
+  }
+
+  setRetainRequestBodyValueFlag = (value) => {
+    const { oas3Actions, pathMethod } = this.props
+    oas3Actions.setRetainRequestBodyValueFlag({ value, pathMethod })
+  }
+
+  onRequestBodyActiveExamplesKeyChange = (key) => {
+    this.props.oas3Actions.setActiveExamplesMember({
+      name: key,
+      pathMethod: this.props.pathMethod,
+      contextType: "requestBody",
+      contextName: "requestBody", // RBs are currently not stored per-mediaType
+    })
+  }
+
+  onRequestBodyChange = (value, path) => {
+    const { oas3Actions, oas3Selectors, pathMethod } = this.props
+    if (path) {
+      const lastValue = oas3Selectors.requestBodyValue(...pathMethod)
+      const usableValue = Map.isMap(lastValue) ? lastValue : Map()
+      return oas3Actions.setRequestBodyValue({
+        pathMethod,
+        value: usableValue.setIn(path, value),
+      })
+    }
+    oas3Actions.setRequestBodyValue({ value, pathMethod })
+  }
+
+  onRequestBodyIncludeEmptyChange = (name, value) => {
+    const { oas3Actions, pathMethod } = this.props
+    oas3Actions.setRequestBodyInclusion({
+      pathMethod,
+      value,
+      name,
+    })
+  }
   
   onChangeMediaType = ({ value, pathMethod }) => {
     let { specActions, oas3Selectors, oas3Actions } = this.props
@@ -85,7 +131,6 @@ export default class Parameters extends Component {
 
     let {
       onTryoutClick,
-      onResetClick,
       parameters,
       allowTryItOut,
       tryItOutEnabled,
@@ -130,19 +175,18 @@ export default class Parameters extends Component {
       }, {}))
       .reduce((acc, x) => acc.concat(x), [])
 
-    const retainRequestBodyValueFlagForOperation = (f) => oas3Actions.setRetainRequestBodyValueFlag({ value: f, pathMethod })
     return (
       <div className="opblock-section">
         <div className="opblock-section-header">
           {isOAS3 ? (
             <div className="tab-header">
-              <div onClick={() => this.toggleTab("parameters")}
+              <div onClick={this.onParametersTabClick}
                    className={`tab-item ${parametersVisible && "active"}`}>
                 <h4 className="opblock-title"><span>Parameters</span></h4>
               </div>
               {operation.get("callbacks") ?
                 (
-                  <div onClick={() => this.toggleTab("callbacks")}
+                  <div onClick={this.onCallbacksTabClick}
                        className={`tab-item ${callbackVisible && "active"}`}>
                     <h4 className="opblock-title"><span>Callbacks</span></h4>
                   </div>
@@ -161,7 +205,7 @@ export default class Parameters extends Component {
               enabled={tryItOutEnabled}
               onCancelClick={this.props.onCancelClick}
               onTryoutClick={onTryoutClick}
-              onResetClick={() => onResetClick(pathMethod)}/>
+              onResetClick={this.onResetClickWrapper}/>
           ) : null}
         </div>
         {parametersVisible ? <div className="parameters-container">
@@ -217,9 +261,7 @@ export default class Parameters extends Component {
                 <ContentType
                   value={oas3Selectors.requestContentType(...pathMethod)}
                   contentTypes={requestBody.get("content", List()).keySeq()}
-                  onChange={(value) => {
-                    this.onChangeMediaType({ value, pathMethod })
-                  }}
+                  onChange={this.onRequestContentTypeChange}
                   className="body-param-content-type"
                   ariaLabel="Request content type" 
                   controlId={controlId}
@@ -228,7 +270,7 @@ export default class Parameters extends Component {
             </div>
             <div className="opblock-description-wrapper">
               <RequestBody
-                setRetainRequestBodyValueFlag={retainRequestBodyValueFlagForOperation}
+                setRetainRequestBodyValueFlag={this.setRetainRequestBodyValueFlag}
                 userHasEditedBody={oas3Selectors.hasUserEditedBody(...pathMethod)}
                 specPath={specPath.slice(0, -1).push("requestBody")}
                 requestBody={requestBody}
@@ -242,33 +284,9 @@ export default class Parameters extends Component {
                   "requestBody",
                   "requestBody", // RBs are currently not stored per-mediaType
                 )}
-                updateActiveExamplesKey={key => {
-                  this.props.oas3Actions.setActiveExamplesMember({
-                    name: key,
-                    pathMethod: this.props.pathMethod,
-                    contextType: "requestBody",
-                    contextName: "requestBody", // RBs are currently not stored per-mediaType
-                  })
-                }
-                }
-                onChange={(value, path) => {
-                  if (path) {
-                    const lastValue = oas3Selectors.requestBodyValue(...pathMethod)
-                    const usableValue = Map.isMap(lastValue) ? lastValue : Map()
-                    return oas3Actions.setRequestBodyValue({
-                      pathMethod,
-                      value: usableValue.setIn(path, value),
-                    })
-                  }
-                  oas3Actions.setRequestBodyValue({ value, pathMethod })
-                }}
-                onChangeIncludeEmpty={(name, value) => {
-                  oas3Actions.setRequestBodyInclusion({
-                    pathMethod,
-                    value,
-                    name,
-                  })
-                }}
+                updateActiveExamplesKey={this.onRequestBodyActiveExamplesKeyChange}
+                onChange={this.onRequestBodyChange}
+                onChangeIncludeEmpty={this.onRequestBodyIncludeEmptyChange}
                 contentType={oas3Selectors.requestContentType(...pathMethod)} />
             </div>
           </div>
