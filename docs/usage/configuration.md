@@ -63,6 +63,17 @@ Parameter name | Docker variable | Description
         </td>
     </tr>
     <tr>
+        <td><a name="user-content-sidebar"></a><code>sidebar</code></td>
+        <td><code>SIDEBAR</code></td>
+        <td><code>Boolean=false</code>. If set to <code>true</code>, shows a
+            sticky navigation sidebar listing tags with their operations and
+            the schemas (models). Clicking an entry expands it and smoothly
+            scrolls the page to it. The sidebar scrolls independently. When
+            Swagger UI is narrower than 900px, it is hidden behind a floating
+            menu button and opens as a drawer.
+        </td>
+    </tr>
+    <tr>
         <td><a name="user-content-displayoperationid"></a><code>displayOperationId</code>
         </td>
         <td><code>DISPLAY_OPERATION_ID</code></td>

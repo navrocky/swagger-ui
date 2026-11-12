@@ -1,0 +1,295 @@
+@use "variables" as *;
+@use "type";
+
+// Loaded outside of `.swagger-ui` nesting: the root element carries the
+// `swagger-ui` class itself, so the selectors must not require an ancestor.
+
+$sidebar-width: 280px !default;
+$sidebar-background-color: $alabaster !default;
+$sidebar-border-color: $geyser-blue !default;
+$sidebar-font-color: $bright-gray !default;
+$sidebar-hover-background-color: rgba($black, 0.05) !default;
+$sidebar-active-background-color: rgba($color-info, 0.15) !default;
+$sidebar-narrow-breakpoint: 900px !default;
+$sidebar-drawer-width: 320px !default;
+$sidebar-drawer-z-index: 1000 !default;
+$sidebar-backdrop-color: rgba($black, 0.4) !default;
+$sidebar-toggle-background-color: $bright-gray !default;
+$sidebar-toggle-font-color: $white !default;
+
+$sidebar-method-colors: (
+  get: $color-get,
+  post: $color-post,
+  put: $color-put,
+  delete: $color-delete,
+  head: $color-head,
+  patch: $color-patch,
+  options: $color-options,
+  query: $color-query,
+  trace: $gray-500,
+);
+
+.swagger-ui--with-sidebar {
+  display: flex;
+  align-items: flex-start;
+
+  .sidebar-layout__main {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  .sidebar {
+    position: sticky;
+    top: 0;
+    flex: 0 0 $sidebar-width;
+    width: $sidebar-width;
+    height: 100vh;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    box-sizing: border-box;
+    padding: 12px 0;
+    background: $sidebar-background-color;
+    border-right: 1px solid $sidebar-border-color;
+
+    @include type.text_body($sidebar-font-color);
+
+    ul {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    button {
+      font: inherit;
+      color: inherit;
+      background: none;
+      border: none;
+      cursor: pointer;
+    }
+  }
+
+  .sidebar__group {
+    margin-bottom: 4px;
+
+    &[data-group="schemas"] {
+      padding-top: 8px;
+      margin-top: 8px;
+      border-top: 1px solid $sidebar-border-color;
+    }
+  }
+
+  .sidebar__group-header {
+    display: flex;
+    align-items: center;
+    padding: 0 8px;
+  }
+
+  .sidebar__group-toggle {
+    display: flex;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    padding: 0;
+
+    svg {
+      transition: transform 0.15s ease;
+
+      path {
+        fill: none;
+        stroke: currentcolor;
+        stroke-width: 1.5;
+      }
+    }
+
+    &.is-collapsed svg {
+      transform: rotate(-90deg);
+    }
+  }
+
+  .sidebar__group-title {
+    flex: 1 1 auto;
+    min-width: 0;
+    padding: 6px 8px;
+    overflow: hidden;
+    font-size: 14px;
+    font-weight: 700;
+    text-align: left;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    border-radius: 4px;
+  }
+
+  .sidebar__operation {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 4px 12px 4px 36px;
+    text-align: left;
+    gap: 8px;
+  }
+
+  .sidebar__group-title,
+  .sidebar__operation {
+    &:hover {
+      background: $sidebar-hover-background-color;
+    }
+
+    &.is-active {
+      background: $sidebar-active-background-color;
+    }
+
+    &:focus-visible {
+      outline: 2px solid $color-info;
+      outline-offset: -2px;
+    }
+  }
+
+  .sidebar__operation.is-deprecated .sidebar__path {
+    text-decoration: line-through;
+    opacity: 0.6;
+  }
+
+  .sidebar__method {
+    flex: 0 0 52px;
+    padding: 2px 0;
+    font-size: 10px;
+    font-weight: 700;
+    color: $white;
+    text-align: center;
+    border-radius: 3px;
+    background: $gray-500;
+
+    @each $method, $color in $sidebar-method-colors {
+      &--#{$method} {
+        background: $color;
+      }
+    }
+  }
+
+  .sidebar__path {
+    min-width: 0;
+    overflow: hidden;
+    font-size: 12px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    @include type.text_code($sidebar-font-color);
+  }
+
+  // Drawer chrome and the toggle are only shown in the narrow layout.
+  .sidebar-toggle,
+  .sidebar-backdrop,
+  .sidebar__drawer-header {
+    display: none;
+  }
+
+  .sidebar__drawer-header {
+    align-items: center;
+    justify-content: space-between;
+    padding: 4px 12px 12px 16px;
+    margin-bottom: 4px;
+    border-bottom: 1px solid $sidebar-border-color;
+  }
+
+  .sidebar__drawer-title {
+    font-size: 16px;
+    font-weight: 700;
+  }
+
+  .sidebar__drawer-close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    border-radius: 4px;
+
+    &:hover {
+      background: $sidebar-hover-background-color;
+    }
+
+    path {
+      fill: none;
+      stroke: currentcolor;
+      stroke-width: 1.75;
+    }
+  }
+
+  .sidebar-toggle {
+    position: fixed;
+    bottom: 16px;
+    left: 16px;
+    z-index: $sidebar-drawer-z-index;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    padding: 0;
+    color: $sidebar-toggle-font-color;
+    cursor: pointer;
+    background: $sidebar-toggle-background-color;
+    border: none;
+    border-radius: 50%;
+    box-shadow: 0 2px 8px rgba($black, 0.3);
+
+    path {
+      fill: none;
+      stroke: currentcolor;
+      stroke-width: 2;
+      stroke-linecap: round;
+    }
+
+    &:focus-visible {
+      outline: 2px solid $color-info;
+      outline-offset: 2px;
+    }
+  }
+
+  .sidebar-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: $sidebar-drawer-z-index;
+    background: $sidebar-backdrop-color;
+  }
+
+  @container swagger-ui (max-width: #{$sidebar-narrow-breakpoint}) {
+    .sidebar-toggle,
+    .sidebar-backdrop,
+    .sidebar__drawer-header {
+      display: flex;
+    }
+
+    .sidebar {
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      z-index: $sidebar-drawer-z-index + 1;
+      width: $sidebar-drawer-width;
+      max-width: 85vw;
+      height: auto;
+      visibility: hidden;
+      box-shadow: 2px 0 12px rgba($black, 0.25);
+      transform: translateX(-100%);
+      transition:
+        transform 0.25s ease,
+        visibility 0s linear 0.25s;
+
+      &.is-open {
+        visibility: visible;
+        transform: translateX(0);
+        transition: transform 0.25s ease;
+      }
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .sidebar,
+    .sidebar.is-open {
+      transition: none;
+    }
+  }
+}

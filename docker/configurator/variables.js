@@ -91,6 +91,10 @@ const standardVariables = {
     type: "boolean",
     name: "showMutatedRequest"
   },
+  SIDEBAR: {
+    type: "boolean",
+    name: "sidebar"
+  },
   SUPPORTED_SUBMIT_METHODS: {
     type: "array",
     name: "supportedSubmitMethods"

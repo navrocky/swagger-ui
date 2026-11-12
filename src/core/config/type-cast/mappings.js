@@ -104,6 +104,10 @@ const mappings = {
     typeCaster: booleanTypeCaster,
     defaultValue: defaultOptions.showMutatedRequest,
   },
+  sidebar: {
+    typeCaster: booleanTypeCaster,
+    defaultValue: defaultOptions.sidebar,
+  },
   spec: { typeCaster: objectTypeCaster, defaultValue: defaultOptions.spec },
   supportedSubmitMethods: {
     typeCaster: arrayTypeCaster,
