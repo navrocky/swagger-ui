@@ -21,7 +21,9 @@ export default class Responses extends React.Component {
     oas3Actions: PropTypes.object.isRequired,
     oas3Selectors: PropTypes.object.isRequired,
     specPath: ImPropTypes.list.isRequired,
-    fn: PropTypes.object.isRequired
+    fn: PropTypes.object.isRequired,
+    layoutSelectors: PropTypes.object,
+    layoutActions: PropTypes.object,
   }
 
   static defaultProps = {
@@ -46,6 +48,23 @@ export default class Responses extends React.Component {
   // }
 
 	onChangeProducesWrapper = ( val ) => this.props.specActions.changeProducesValue([this.props.path, this.props.method], val)
+
+  getExpandedKey = () => ["operation-responses", this.props.path, this.props.method]
+
+  isExpanded = () => {
+    const { layoutSelectors, getConfigs } = this.props
+    const expandedByDefault = !getConfigs().collapseResponses
+    return layoutSelectors
+      ? layoutSelectors.isShown(this.getExpandedKey(), expandedByDefault)
+      : expandedByDefault
+  }
+
+  toggleExpanded = () => {
+    const { layoutActions } = this.props
+    if (layoutActions) {
+      layoutActions.show(this.getExpandedKey(), !this.isExpanded())
+    }
+  }
 
   onResponseContentTypeChange = ({ controlsAcceptHeader, value }) => {
     const { oas3Actions, path, method } = this.props
@@ -77,6 +96,8 @@ export default class Responses extends React.Component {
     let defaultCode = defaultStatusCode( responses )
 
     const ContentType = getComponent( "contentType" )
+    const ArrowUpIcon = getComponent( "ArrowUpIcon" )
+    const ArrowDownIcon = getComponent( "ArrowDownIcon" )
     const LiveResponse = getComponent( "liveResponse" )
     const Response = getComponent( "response" )
 
@@ -90,11 +111,31 @@ export default class Responses extends React.Component {
     const nonExtensionResponses = responses.filter((_, key) => !isExtension(key))
     const regionId = createHtmlReadyId(`${method}${path}_responses`)
     const controlId = `${regionId}_select`
+    const isExpanded = this.isExpanded()
+    const liveResponseCode = tryItOutResponse ? String(tryItOutResponse.get("status")) : null
 
     return (!nonExtensionResponses || !nonExtensionResponses.size) ? null : (
       <div className="responses-wrapper">
         <div className="opblock-section-header">
-          <h4>Responses</h4>
+          <h4>
+            <button
+              type="button"
+              className="responses-toggle"
+              aria-expanded={isExpanded}
+              aria-controls={regionId}
+              onClick={this.toggleExpanded}
+            >
+              <span>Responses</span>
+              { isExpanded ? null :
+                <span className="responses-codes" aria-label="Documented response codes">
+                  { nonExtensionResponses.keySeq().map((code) =>
+                    <span key={code} className={code === liveResponseCode ? "response-code response_current" : "response-code"}>{code}</span>
+                  ).toArray() }
+                </span>
+              }
+              { isExpanded ? <ArrowUpIcon width="14" height="14" /> : <ArrowDownIcon width="14" height="14" /> }
+            </button>
+          </h4>
             { specSelectors.isOAS3() ? null : <label htmlFor={controlId}>
               <span>Response content type</span>
               <ContentType value={producesValue}
@@ -106,6 +147,7 @@ export default class Responses extends React.Component {
                          onChange={this.onChangeProducesWrapper} />
                      </label> }
         </div>
+        { !isExpanded && !tryItOutResponse ? null :
         <div className="responses-inner">
           {
             !tryItOutResponse ? null
@@ -117,11 +159,12 @@ export default class Responses extends React.Component {
                                                 path={ this.props.path }
                                                 method={ this.props.method }
                                                 displayRequestDuration={ displayRequestDuration } />
-                                  <h4>Responses</h4>
+                                  { isExpanded ? <h4>Responses</h4> : null }
                                 </div>
 
           }
 
+          { !isExpanded ? null :
           <table aria-live="polite" className="responses-table" id={regionId} role="region">
             <thead>
               <tr className="responses-header">
@@ -164,7 +207,9 @@ export default class Responses extends React.Component {
               }
             </tbody>
           </table>
+          }
         </div>
+        }
       </div>
     )
   }

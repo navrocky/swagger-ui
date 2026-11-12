@@ -74,6 +74,15 @@ Parameter name | Docker variable | Description
         </td>
     </tr>
     <tr>
+        <td><a name="user-content-collapseresponses"></a><code>collapseResponses</code></td>
+        <td><code>COLLAPSE_RESPONSES</code></td>
+        <td><code>Boolean=false</code>. If set to <code>true</code>, the list of
+            documented responses of each operation is collapsed by default and
+            can be expanded with the "Responses" header. The actual server
+            response of an executed request is always shown.
+        </td>
+    </tr>
+    <tr>
         <td><a name="user-content-displayoperationid"></a><code>displayOperationId</code>
         </td>
         <td><code>DISPLAY_OPERATION_ID</code></td>

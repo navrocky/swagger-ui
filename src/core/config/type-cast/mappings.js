@@ -18,6 +18,10 @@ import undefinedStringTypeCaster from "./type-casters/undefined-string"
 import defaultOptions from "../defaults"
 
 const mappings = {
+  collapseResponses: {
+    typeCaster: booleanTypeCaster,
+    defaultValue: defaultOptions.collapseResponses,
+  },
   components: { typeCaster: objectTypeCaster },
   configs: { typeCaster: objectTypeCaster },
   configUrl: { typeCaster: nullableStringTypeCaster },
