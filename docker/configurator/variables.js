@@ -31,6 +31,10 @@ const standardVariables = {
     type: "string",
     name: "layout"
   },
+  ALWAYS_SHOW_EXECUTE: {
+    type: "boolean",
+    name: "alwaysShowExecute"
+  },
   COLLAPSE_RESPONSES: {
     type: "boolean",
     name: "collapseResponses"

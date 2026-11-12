@@ -18,6 +18,10 @@ import undefinedStringTypeCaster from "./type-casters/undefined-string"
 import defaultOptions from "../defaults"
 
 const mappings = {
+  alwaysShowExecute: {
+    typeCaster: booleanTypeCaster,
+    defaultValue: defaultOptions.alwaysShowExecute,
+  },
   collapseResponses: {
     typeCaster: booleanTypeCaster,
     defaultValue: defaultOptions.collapseResponses,
